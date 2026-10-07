@@ -1,0 +1,2778 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SmartWaste Rewards</title>
+    <meta
+      name="description"
+      content="SmartWaste Rewards for waste segregation and reward points."
+    />
+    <style>
+      :root {
+        --bg: #f4f9f5;
+        --panel: #ffffff;
+        --panel-alt: #f3fbf4;
+        --primary: #1f8a5b;
+        --primary-deep: #0e5b3a;
+        --primary-soft: #dff5e8;
+        --accent: #f8b74c;
+        --accent-soft: #fff3d8;
+        --text: #18342b;
+        --muted: #5f6f67;
+        --line: #dfe9e3;
+        --danger: #dd5f40;
+        --shadow: 0 14px 32px rgba(18, 53, 39, 0.08);
+        --radius-xl: 24px;
+        --radius-lg: 18px;
+        --radius-md: 14px;
+      }
+
+      * { box-sizing: border-box; }
+
+      html { scroll-behavior: smooth; }
+
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        background: linear-gradient(180deg, #f6faf7 0%, #edf8f2 100%);
+        color: var(--text);
+      }
+
+      a { text-decoration: none; color: inherit; }
+      button, input, select { font: inherit; }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 30;
+        background: rgba(255,255,255,0.88);
+        backdrop-filter: blur(14px);
+        border-bottom: 1px solid rgba(31,138,91,0.08);
+      }
+
+      .topbar-inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 14px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        min-width: 0;
+      }
+
+      .logo-mark {
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
+        background: linear-gradient(135deg, var(--primary) 0%, #2cb06d 100%);
+        position: relative;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+      }
+
+      .logo-mark::before,
+      .logo-mark::after {
+        content: "";
+        position: absolute;
+      }
+
+      .logo-mark::before {
+        width: 18px;
+        height: 18px;
+        border: 4px solid #fff;
+        border-left-color: transparent;
+        border-bottom-color: transparent;
+        border-radius: 50%;
+        transform: rotate(45deg);
+        left: 11px;
+        top: 10px;
+      }
+
+      .logo-mark::after {
+        width: 14px;
+        height: 14px;
+        background: var(--accent);
+        border-radius: 50%;
+        right: 8px;
+        top: 9px;
+        box-shadow: 0 0 0 3px rgba(255,255,255,0.6);
+      }
+
+      .brand-text {
+        margin-left: 12px;
+        line-height: 1.1;
+      }
+
+      .brand-title {
+        font-size: 1.15rem;
+        font-weight: 800;
+        color: var(--primary-deep);
+        letter-spacing: -0.02em;
+      }
+
+      .brand-sub {
+        font-size: 0.7rem;
+        color: var(--muted);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .topnav {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+      }
+
+      .nav-link,
+      .pill-button,
+      .primary-btn,
+      .secondary-btn,
+      .ghost-btn,
+      .tiny-btn,
+      .tiny-btn-alt {
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .nav-link {
+        background: transparent;
+        color: var(--muted);
+        padding: 10px 12px;
+        border-radius: 10px;
+        font-weight: 600;
+      }
+
+      .nav-link:hover,
+      .nav-link.active {
+        background: var(--primary-soft);
+        color: var(--primary-deep);
+      }
+
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .profile-button {
+        width: 44px;
+        height: 44px;
+        padding: 0;
+        border: 2px solid var(--primary-soft);
+        border-radius: 50%;
+        background: #fff;
+        cursor: pointer;
+        overflow: hidden;
+      }
+
+      .profile-button img {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
+      .pill-button,
+      .tiny-btn,
+      .tiny-btn-alt {
+        border-radius: 999px;
+        padding: 10px 16px;
+        font-weight: 700;
+      }
+
+      .pill-button,
+      .primary-btn {
+        background: linear-gradient(135deg, var(--primary) 0%, #2fa86a 100%);
+        color: #fff;
+        box-shadow: 0 10px 20px rgba(31, 138, 91, 0.15);
+      }
+
+      .pill-button:hover,
+      .primary-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 14px 30px rgba(31, 138, 91, 0.2);
+      }
+
+      .secondary-btn,
+      .tiny-btn-alt {
+        background: #fff;
+        color: var(--primary-deep);
+        border: 1px solid var(--line);
+      }
+
+      .ghost-btn {
+        background: transparent;
+        color: var(--primary-deep);
+        border: 1px solid rgba(31,138,91,0.18);
+        padding: 10px 16px;
+        border-radius: 12px;
+        font-weight: 700;
+      }
+
+      .tiny-btn {
+        background: var(--primary-soft);
+        color: var(--primary-deep);
+      }
+
+      .tiny-btn-alt {
+        background: #fff;
+        color: var(--muted);
+      }
+
+      .page {
+        display: none;
+        min-height: calc(100vh - 86px);
+        padding: 52px 0 90px;
+      }
+
+      .page.active {
+        display: block;
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        align-items: center;
+        gap: 36px;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--primary-soft);
+        color: var(--primary-deep);
+        border: 1px solid rgba(31,138,91,0.12);
+        padding: 8px 12px;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+
+      h1, h2, h3, h4, p { margin: 0; }
+
+      .hero h1 {
+        margin-top: 20px;
+        font-size: clamp(2.5rem, 5vw, 4.2rem);
+        line-height: 0.98;
+        letter-spacing: -0.06em;
+        color: var(--primary-deep);
+      }
+
+      .hero p {
+        margin-top: 18px;
+        font-size: 1.08rem;
+        line-height: 1.7;
+        color: var(--muted);
+        max-width: 620px;
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+        margin-top: 28px;
+      }
+
+      .primary-btn, .secondary-btn {
+        padding: 15px 24px;
+        border-radius: 14px;
+        font-weight: 700;
+        border: none;
+        cursor: pointer;
+      }
+
+      .primary-btn {
+        min-width: 180px;
+      }
+
+      .secondary-btn {
+        background: transparent;
+        color: var(--primary-deep);
+        border: 1px solid rgba(31,138,91,0.15);
+      }
+
+      .overview-card {
+        background: linear-gradient(160deg, #ffffff 0%, #eefaf3 100%);
+        border: 1px solid rgba(31,138,91,0.08);
+        border-radius: var(--radius-xl);
+        padding: 20px;
+        box-shadow: var(--shadow);
+      }
+
+      .station-visual {
+        background: linear-gradient(180deg, #f4faf5 0%, #edf6f1 100%);
+        border-radius: 24px;
+        border: 1px solid rgba(31,138,91,0.1);
+        padding: 22px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .station-visual::before {
+        content: "";
+        position: absolute;
+        inset: 16px;
+        background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.25));
+        border-radius: 18px;
+        border: 1px solid rgba(31,138,91,0.1);
+      }
+
+      .station-grid {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(130px, 1fr));
+        gap: 14px;
+      }
+
+      .station-box {
+        background: #fff;
+        border-radius: 18px;
+        border: 1px solid rgba(31,138,91,0.13);
+        min-height: 128px;
+        padding: 16px 12px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        box-shadow: 0 10px 22px rgba(17, 55, 41, 0.04);
+      }
+
+      .station-box .icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        display: grid;
+        place-items: center;
+        font-size: 1.4rem;
+        margin-bottom: 8px;
+      }
+
+      .station-box:nth-child(1) .icon { background: #eaf7ef; color: var(--primary); }
+      .station-box:nth-child(2) .icon { background: #fff6db; color: #c98511; }
+      .station-box:nth-child(3) .icon { background: #ebf2ff; color: #3a68d3; }
+      .station-box:nth-child(4) .icon { background: #e8f6f2; color: var(--primary-deep); }
+
+      .station-box h4 {
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+        margin-top: 2px;
+      }
+
+      .station-box strong {
+        display: block;
+        margin-top: 6px;
+        font-size: 1.05rem;
+        color: var(--primary-deep);
+      }
+
+      .mini-badge {
+        position: absolute;
+        right: 24px;
+        bottom: 22px;
+        z-index: 2;
+        background: #fff;
+        border: 1px solid rgba(31,138,91,0.12);
+        border-radius: 12px;
+        padding: 10px 12px;
+        box-shadow: 0 10px 20px rgba(17,55,41,0.08);
+      }
+
+      .mini-badge small {
+        display: block;
+        color: var(--muted);
+        font-size: 0.68rem;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+      }
+
+      .mini-badge strong {
+        font-size: 1.1rem;
+        color: var(--primary-deep);
+      }
+
+      .stats-grid {
+        margin-top: 56px;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(160px, 1fr));
+        gap: 18px;
+      }
+
+      .stat-card {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: 22px 18px;
+        box-shadow: 0 8px 18px rgba(19, 50, 36, 0.04);
+      }
+
+      .stat-card .label {
+        display: block;
+        color: var(--muted);
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+
+      .stat-card strong {
+        display: block;
+        margin-top: 12px;
+        font-size: clamp(1.5rem, 2vw, 2.2rem);
+        color: var(--primary-deep);
+      }
+
+      .section-head {
+        margin-bottom: 26px;
+      }
+
+      .section-head h2 {
+        font-size: clamp(1.9rem, 3vw, 2.8rem);
+        letter-spacing: -0.05em;
+        color: var(--primary-deep);
+      }
+
+      .how-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(180px, 1fr));
+        gap: 18px;
+      }
+
+      .step-card {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        padding: 22px 18px;
+        box-shadow: 0 10px 20px rgba(18, 53, 39, 0.05);
+      }
+
+      .step-number {
+        display: inline-grid;
+        place-items: center;
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        background: var(--primary-soft);
+        color: var(--primary-deep);
+        font-weight: 800;
+        margin-bottom: 14px;
+      }
+
+      .step-card h3 {
+        font-size: 1.12rem;
+        margin-bottom: 8px;
+      }
+
+      .step-card p {
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .page-shell {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      .auth-wrap {
+        display: grid;
+        grid-template-columns: 0.9fr 1.1fr;
+        gap: 28px;
+        align-items: stretch;
+      }
+
+      .auth-panel,
+      .panel,
+      .summary-panel,
+      .form-card,
+      .chart-card,
+      .history-card,
+      .profile-card,
+      .admin-panel {
+        background: rgba(255,255,255,0.96);
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        box-shadow: var(--shadow);
+      }
+
+      .auth-panel {
+        padding: 32px;
+      }
+
+      .auth-panel h2 {
+        font-size: clamp(2rem, 3vw, 2.6rem);
+        letter-spacing: -0.05em;
+        color: var(--primary-deep);
+      }
+
+      .auth-panel p {
+        margin-top: 12px;
+        color: var(--muted);
+      }
+
+      .form-grid {
+        display: grid;
+        gap: 16px;
+        margin-top: 24px;
+      }
+
+      .field { display: grid; gap: 8px; }
+
+      .field label {
+        font-weight: 700;
+        color: var(--primary-deep);
+      }
+
+      .field input {
+        width: 100%;
+        border-radius: 12px;
+        border: 1px solid var(--line);
+        background: #fbfdfb;
+        padding: 14px 14px;
+        color: var(--text);
+      }
+
+      .field input:focus { outline: 2px solid rgba(31,138,91,0.18); }
+
+      .dual-buttons {
+        display: flex;
+        gap: 12px;
+        margin-top: 12px;
+        flex-wrap: wrap;
+      }
+
+      .feature-list {
+        list-style: none;
+        padding: 0;
+        display: grid;
+        gap: 12px;
+        margin-top: 28px;
+      }
+
+      .feature-list li {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 10px;
+        border-radius: 12px;
+        background: var(--panel-alt);
+        color: var(--primary-deep);
+        font-weight: 600;
+      }
+
+      .feature-list li::before {
+        content: "✓";
+        width: 24px;
+        height: 24px;
+        display: inline-grid;
+        place-items: center;
+        border-radius: 50%;
+        background: var(--primary-soft);
+        color: var(--primary);
+        font-weight: 800;
+      }
+
+      .station-page {
+        margin-top: 18px;
+      }
+
+      .station-card {
+        background: linear-gradient(180deg, #fff, #f4faf5);
+        border: 1px solid rgba(31,138,91,0.1);
+        border-radius: 28px;
+        padding: 32px;
+        box-shadow: var(--shadow);
+      }
+
+      .station-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        border-bottom: 1px solid var(--line);
+        padding-bottom: 18px;
+        margin-bottom: 24px;
+      }
+
+      .station-header h2 {
+        font-size: clamp(2rem, 2.4vw, 3rem);
+        letter-spacing: -0.05em;
+        color: var(--primary-deep);
+      }
+
+      .station-meta {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 18px;
+        margin-top: 24px;
+      }
+
+      .meta-box {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: 18px 16px;
+      }
+
+      .meta-label {
+        display: block;
+        color: var(--muted);
+        font-size: 0.72rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+      }
+
+      .meta-box strong {
+        font-size: 1.05rem;
+        color: var(--primary-deep);
+      }
+
+      .station-categories {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(180px, 1fr));
+        gap: 18px;
+        margin-top: 30px;
+      }
+
+      .category-card {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: 18px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        box-shadow: 0 10px 22px rgba(17,55,41,0.04);
+      }
+
+      .category-card .mini-icon {
+        width: 46px;
+        height: 46px;
+        border-radius: 14px;
+        display: grid;
+        place-items: center;
+        font-size: 1.3rem;
+      }
+
+      .category-card:nth-child(1) .mini-icon { background: #eaf7ef; color: var(--primary); }
+      .category-card:nth-child(2) .mini-icon { background: #fff3d7; color: #c88116; }
+      .category-card:nth-child(3) .mini-icon { background: #edf2ff; color: #4667d5; }
+      .category-card:nth-child(4) .mini-icon { background: #f7f2ff; color: #7d5bd8; }
+
+      .category-card span {
+        display: block;
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+      }
+
+      .category-card strong {
+        display: block;
+        font-size: 1.04rem;
+        margin-top: 2px;
+      }
+
+      .notice-box {
+        background: var(--accent-soft);
+        border: 1px solid rgba(248,183,76,0.25);
+        color: #8d5a0a;
+        border-radius: 16px;
+        padding: 14px 18px;
+        margin-top: 24px;
+        font-weight: 600;
+      }
+
+      .dashboard-grid {
+        display: grid;
+        gap: 22px;
+      }
+
+      .dashboard-top {
+        background: linear-gradient(135deg, #f4faf5 0%, #ebf9f2 100%);
+        border: 1px solid var(--line);
+        border-radius: 28px;
+        padding: 28px;
+        box-shadow: var(--shadow);
+      }
+
+      .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .dashboard-header h2 {
+        font-size: clamp(2rem, 3vw, 2.8rem);
+        letter-spacing: -0.05em;
+        color: var(--primary-deep);
+      }
+
+      .stat-row {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(150px, 1fr));
+        gap: 18px;
+      }
+
+      .stat-metric {
+        background: rgba(255,255,255,0.9);
+        border: 1px solid rgba(31,138,91,0.1);
+        border-radius: 18px;
+        padding: 18px;
+      }
+
+      .stat-metric small {
+        display: block;
+        color: var(--muted);
+        font-weight: 700;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+      }
+
+      .stat-metric strong {
+        display: block;
+        margin-top: 10px;
+        font-size: clamp(1.5rem, 2vw, 2.1rem);
+        color: var(--primary-deep);
+      }
+
+      .progress-panel {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: 18px 20px;
+        margin-top: 18px;
+      }
+
+      .progress-copy {
+        display: grid;
+        gap: 8px;
+      }
+
+      .progress-copy strong {
+        color: var(--primary-deep);
+        font-size: 1.05rem;
+      }
+
+      .progress-bar {
+        flex: 1;
+        height: 12px;
+        background: #edf3ef;
+        border-radius: 999px;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .progress-bar span {
+        display: block;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, var(--primary), #54c583);
+        border-radius: inherit;
+      }
+
+      .card-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(170px, 1fr));
+        gap: 18px;
+      }
+
+      .quick-card {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        padding: 18px;
+        box-shadow: 0 12px 20px rgba(17,55,41,0.04);
+        min-height: 150px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .quick-card .icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 14px;
+        display: grid;
+        place-items: center;
+        font-size: 1.4rem;
+        background: var(--primary-soft);
+        color: var(--primary);
+      }
+
+      .quick-card strong {
+        display: block;
+        font-size: 1.12rem;
+        color: var(--primary-deep);
+      }
+
+      .quick-card p {
+        color: var(--muted);
+        line-height: 1.5;
+      }
+
+      .waste-form {
+        display: grid;
+        gap: 22px;
+      }
+
+      .form-section {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 22px;
+        padding: 24px;
+        box-shadow: var(--shadow);
+      }
+
+      .form-section h3 {
+        font-size: 1.4rem;
+        letter-spacing: -0.04em;
+        color: var(--primary-deep);
+        margin-bottom: 18px;
+      }
+
+      .waste-types {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(180px, 1fr));
+        gap: 16px;
+      }
+
+      .waste-type {
+        position: relative;
+        cursor: pointer;
+      }
+
+      .waste-type input { display: none; }
+
+      .type-card {
+        background: #f7faf8;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: 18px 16px;
+        min-height: 144px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 12px;
+        transition: all 0.2s ease;
+      }
+
+      .waste-type input:checked + .type-card {
+        border-color: rgba(31,138,91,0.3);
+        background: linear-gradient(180deg, #f4faf6 0%, #ebf9f1 100%);
+        box-shadow: 0 10px 20px rgba(31,138,91,0.08);
+      }
+
+      .waste-type input:focus-visible + .type-card {
+        outline: 2px solid var(--primary);
+        outline-offset: 3px;
+      }
+
+      .type-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: grid;
+        place-items: center;
+        background: #fff;
+        border: 1px solid var(--line);
+        font-size: 1.4rem;
+      }
+
+      .type-card strong {
+        font-size: 1.08rem;
+        color: var(--primary-deep);
+      }
+
+      .type-card small {
+        color: var(--muted);
+        line-height: 1.5;
+      }
+
+      .upload-box {
+        border: 2px dashed rgba(31,138,91,0.25);
+        border-radius: 18px;
+        min-height: 200px;
+        display: grid;
+        place-items: center;
+        text-align: center;
+        background: linear-gradient(180deg, #f7fbf8, #eef9f2);
+        padding: 20px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .upload-box input {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        cursor: pointer;
+      }
+
+      .upload-box-content {
+        max-width: 400px;
+      }
+
+      .upload-box-content .upload-icon {
+        width: 72px;
+        height: 72px;
+        margin: 0 auto 16px;
+        border-radius: 20px;
+        background: #fff;
+        display: grid;
+        place-items: center;
+        font-size: 3rem;
+        box-shadow: 0 12px 22px rgba(17,55,41,0.06);
+      }
+
+      .upload-box strong {
+        display: block;
+        font-size: 1.3rem;
+        margin-bottom: 6px;
+        color: var(--primary-deep);
+      }
+
+      .upload-box p {
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .img-preview {
+        position: absolute;
+        inset: 14px;
+        display: none;
+        object-fit: cover;
+        width: calc(100% - 28px);
+        height: calc(100% - 28px);
+        border-radius: 14px;
+      }
+
+      .upload-box.has-preview .img-preview {
+        display: block;
+      }
+
+      .upload-box.has-preview .upload-box-content {
+        display: none;
+      }
+
+      .weight-grid {
+        display: grid;
+        grid-template-columns: 1fr 280px;
+        gap: 18px;
+      }
+
+      .smart-scale {
+        background: linear-gradient(180deg, #f8faf9, #edfdf4);
+        border: 1px solid rgba(31,138,91,0.15);
+        border-radius: 20px;
+        padding: 18px;
+        display: grid;
+        gap: 14px;
+      }
+
+      .scale-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        color: var(--muted);
+        font-weight: 700;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        font-size: 0.72rem;
+      }
+
+      .scale-display {
+        display: grid;
+        gap: 2px;
+        justify-items: center;
+        padding: 18px;
+        background: #fff;
+        border-radius: 16px;
+        border: 1px solid var(--line);
+      }
+
+      .scale-number {
+        font-size: clamp(2rem, 3vw, 2.8rem);
+        font-weight: 800;
+        color: var(--primary-deep);
+        letter-spacing: -0.06em;
+      }
+
+      .scale-svg {
+        width: 100%;
+        height: 110px;
+        border-radius: 16px;
+        background: linear-gradient(180deg, #f2faf4 0%, #ecf7ef 100%);
+        border: 1px solid rgba(31,138,91,0.08);
+      }
+
+      .calc-card {
+        background: linear-gradient(135deg, rgba(31,138,91,0.06), rgba(248,183,76,0.12));
+        border: 1px solid rgba(31,138,91,0.12);
+        border-radius: 20px;
+        padding: 22px;
+      }
+
+      .calc-card .label {
+        display: block;
+        font-size: 0.72rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .calc-card strong {
+        display: block;
+        font-size: clamp(1.7rem, 3vw, 2.6rem);
+        letter-spacing: -0.06em;
+        color: var(--primary-deep);
+        margin-top: 8px;
+      }
+
+      .calc-card small {
+        display: block;
+        margin-top: 10px;
+        color: var(--muted);
+      }
+
+      .success-box {
+        background: linear-gradient(180deg, #ecfdf4, #f3faf5);
+        border: 1px solid rgba(31,138,91,0.14);
+        border-radius: 24px;
+        padding: 28px;
+        text-align: center;
+        box-shadow: var(--shadow);
+      }
+
+      .success-box h2 {
+        font-size: clamp(2rem, 3vw, 3rem);
+        color: var(--primary-deep);
+        letter-spacing: -0.05em;
+      }
+
+      .success-box p {
+        color: var(--muted);
+        font-size: 1.05rem;
+        line-height: 1.7;
+        margin-top: 12px;
+      }
+
+      .success-stats {
+        display: flex;
+        justify-content: center;
+        gap: 14px;
+        margin-top: 20px;
+        flex-wrap: wrap;
+      }
+
+      .success-pill {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 10px 16px;
+        font-weight: 700;
+        color: var(--primary-deep);
+      }
+
+      .reward-market {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(200px, 1fr));
+        gap: 18px;
+      }
+
+      .reward-card {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        padding: 22px;
+        box-shadow: 0 12px 20px rgba(17,55,41,0.04);
+      }
+
+      .reward-badge {
+        display: inline-block;
+        background: var(--accent-soft);
+        border: 1px solid rgba(248,183,76,0.3);
+        color: #8d650d;
+        border-radius: 999px;
+        padding: 7px 10px;
+        font-size: 0.68rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .reward-card h3 {
+        margin-top: 18px;
+        font-size: 1.25rem;
+        color: var(--primary-deep);
+      }
+
+      .reward-card .amount {
+        display: block;
+        margin-top: 10px;
+        font-size: 2rem;
+        font-weight: 800;
+        letter-spacing: -0.05em;
+        color: var(--primary-deep);
+      }
+
+      .reward-card .points {
+        display: block;
+        margin-top: 6px;
+        color: var(--muted);
+        font-weight: 700;
+      }
+
+      .reward-card button {
+        width: 100%;
+        margin-top: 20px;
+      }
+
+      .modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(11, 31, 23, 0.45);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        z-index: 100;
+      }
+
+      .modal.open { display: flex; }
+
+      .modal-body {
+        width: min(520px, 100%);
+        background: #fff;
+        border-radius: 24px;
+        padding: 28px;
+        box-shadow: 0 30px 70px rgba(0,0,0,0.18);
+      }
+
+      .modal-body h3 {
+        font-size: 1.8rem;
+        color: var(--primary-deep);
+        letter-spacing: -0.05em;
+      }
+
+      .modal-body p {
+        margin-top: 10px;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+
+      .modal-actions {
+        margin-top: 24px;
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+      }
+
+      .voucher-box {
+        background: linear-gradient(135deg, #f5faf6 0%, #ffffff 100%);
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        padding: 28px;
+        box-shadow: var(--shadow);
+        max-width: 720px;
+        margin: 0 auto;
+      }
+
+      .voucher-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: center;
+      }
+
+      .voucher-logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .mini-tag {
+        background: rgba(31,138,91,0.1);
+        border: 1px solid rgba(31,138,91,0.12);
+        color: var(--primary-deep);
+        border-radius: 999px;
+        padding: 8px 12px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        font-size: 0.72rem;
+        text-transform: uppercase;
+      }
+
+      .voucher-graphic {
+        margin-top: 24px;
+        background: linear-gradient(135deg, #f9f6ea 0%, #f3fbf8 100%);
+        border: 1px dashed rgba(31,138,91,0.24);
+        border-radius: 20px;
+        padding: 22px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 180px;
+        position: relative;
+      }
+
+      .qr-art {
+        width: 180px;
+        height: 180px;
+        background:
+          linear-gradient(90deg, #1d2f2a 0 10%, transparent 10% 20%, #1d2f2a 20% 30%, transparent 30% 40%, #1d2f2a 40% 50%, transparent 50% 60%, #1d2f2a 60% 70%, transparent 70% 80%, #1d2f2a 80% 90%, transparent 90% 100%),
+          linear-gradient(#1d2f2a 0 10%, transparent 10% 20%, #1d2f2a 20% 30%, transparent 30% 40%, #1d2f2a 40% 50%, transparent 50% 60%, #1d2f2a 60% 70%, transparent 70% 80%, #1d2f2a 80% 90%, transparent 90% 100%);
+        background-size: 20px 20px;
+        border: 10px solid #fff;
+        box-shadow: 0 15px 30px rgba(17,55,41,0.08);
+        border-radius: 18px;
+      }
+
+      .voucher-code {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 14px;
+        margin-top: 20px;
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 18px 16px;
+      }
+
+      .voucher-code strong {
+        color: var(--primary-deep);
+        font-size: 1.1rem;
+        letter-spacing: 0.04em;
+      }
+
+      .voucher-meta {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(140px, 1fr));
+        gap: 12px;
+        margin-top: 18px;
+      }
+
+      .voucher-meta .meta-box {
+        background: #fff;
+      }
+
+      .table-wrap {
+        overflow: auto;
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        box-shadow: var(--shadow);
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 700px;
+      }
+
+      th, td {
+        text-align: left;
+        padding: 16px 18px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      th {
+        background: #f6faf7;
+        font-size: 0.76rem;
+        letter-spacing: 0.07em;
+        color: var(--muted);
+        text-transform: uppercase;
+      }
+
+      td {
+        color: var(--text);
+      }
+
+      .status-pill {
+        display: inline-block;
+        border-radius: 999px;
+        padding: 8px 12px;
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+
+      .status-verified { background: #eaf9ef; color: #247a50; }
+      .status-redeemed { background: #fff1d5; color: #8e5f0a; }
+      .status-pending { background: #eef3ff; color: #3d5cba; }
+
+      .profile-grid {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 22px;
+      }
+
+      .profile-summary {
+        display: grid;
+        gap: 14px;
+      }
+
+      .profile-summary .info-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        padding: 14px 16px;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: #fbfdfb;
+      }
+
+      .profile-summary .info-row span:first-child {
+        color: var(--muted);
+      }
+
+      .profile-summary .info-row strong {
+        color: var(--primary-deep);
+      }
+
+      .profile-form {
+        display: grid;
+        gap: 16px;
+      }
+
+      .admin-summary {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(150px, 1fr));
+        gap: 16px;
+        margin-bottom: 22px;
+      }
+
+      .admin-summary .stat-metric {
+        min-height: 120px;
+      }
+
+      .charts-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(240px, 1fr));
+        gap: 18px;
+        margin-bottom: 22px;
+      }
+
+      .chart-card {
+        padding: 20px;
+      }
+
+      .chart-card h4 {
+        color: var(--primary-deep);
+        margin-bottom: 18px;
+      }
+
+      .bars {
+        display: flex;
+        align-items: flex-end;
+        gap: 12px;
+        height: 170px;
+      }
+
+      .bar-col {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .bar {
+        width: 100%;
+        border-radius: 10px 10px 0 0;
+        background: linear-gradient(180deg, #5ec889, var(--primary));
+      }
+
+      .bar.bar-warm { background: linear-gradient(180deg, #f2ba62, #e58d31); }
+      .bar.bar-blue { background: linear-gradient(180deg, #8bc2ff, #4f8ce5); }
+
+      .label-row {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        font-size: 0.68rem;
+        color: var(--muted);
+      }
+
+      .line-chart {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 8px;
+        align-items: end;
+        height: 170px;
+      }
+
+      .line-point {
+        background: linear-gradient(180deg, #f7cf63, #f2a433);
+        border-radius: 10px 10px 0 0;
+        min-height: 30px;
+      }
+
+      .table-actions {
+        display: flex;
+        gap: 8px;
+      }
+
+      .table-actions button {
+        border: none;
+        border-radius: 10px;
+        font-weight: 700;
+        padding: 8px 10px;
+        cursor: pointer;
+      }
+
+      .approve-btn {
+        background: #eaf9ef;
+        color: #1f7a50;
+      }
+
+      .approve-btn:disabled {
+        background: #edf2ee;
+        color: #7d8b84;
+        cursor: not-allowed;
+        opacity: 0.7;
+      }
+
+      .reject-btn {
+        background: #fff1ee;
+        color: #bf4a3c;
+      }
+
+      .qr-panel {
+        display: grid;
+        place-items: center;
+        gap: 18px;
+        text-align: center;
+      }
+
+      .qr-box {
+        width: min(360px, 82vw);
+        aspect-ratio: 1;
+        background: #fff;
+        border: 18px solid #fff;
+        border-radius: 26px;
+        box-shadow: var(--shadow);
+        display: grid;
+        place-items: center;
+        position: relative;
+      }
+
+      .qr-box::before {
+        content: "";
+        position: absolute;
+        inset: 20px;
+        background:
+          linear-gradient(90deg, #1f2f2a 0 12%, transparent 12% 18%, #1f2f2a 18% 30%, transparent 30% 36%, #1f2f2a 36% 42%, transparent 42% 62%, #1f2f2a 62% 70%, transparent 70% 76%, #1f2f2a 76% 82%, transparent 82% 100%),
+          linear-gradient(#1f2f2a 0 12%, transparent 12% 18%, #1f2f2a 18% 30%, transparent 30% 36%, #1f2f2a 36% 42%, transparent 42% 62%, #1f2f2a 62% 70%, transparent 70% 76%, #1f2f2a 76% 82%, transparent 82% 100%);
+        background-size: 18px 18px;
+        border-radius: 14px;
+      }
+
+      .qr-box::after {
+        content: "";
+        position: absolute;
+        width: 30%;
+        height: 30%;
+        background: #fff;
+        border-radius: 18px;
+        border: 12px solid #1f2f2a;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      .timeline {
+        position: relative;
+        display: grid;
+        gap: 18px;
+        margin-top: 10px;
+      }
+
+      .timeline::before {
+        content: "";
+        position: absolute;
+        left: 18px;
+        top: 10px;
+        bottom: 10px;
+        width: 2px;
+        background: linear-gradient(180deg, rgba(31,138,91,0.2), rgba(31,138,91,0.7), rgba(31,138,91,0.2));
+      }
+
+      .timeline-item {
+        position: relative;
+        padding-left: 58px;
+      }
+
+      .timeline-bullet {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: linear-gradient(180deg, var(--primary), #46b87a);
+        color: #fff;
+        display: grid;
+        place-items: center;
+        font-weight: 800;
+      }
+
+      .timeline-panel {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: 18px 20px;
+        box-shadow: 0 10px 20px rgba(17,55,41,0.04);
+      }
+
+      .timeline-panel h4 {
+        font-size: 1.15rem;
+        color: var(--primary-deep);
+        margin-bottom: 6px;
+      }
+
+      .timeline-panel p {
+        color: var(--muted);
+        line-height: 1.7;
+      }
+
+      @media (max-width: 980px) {
+        .hero, .auth-wrap, .profile-grid, .weight-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .stats-grid, .card-grid, .reward-market, .station-summary-grid, .dashboard-top .stat-row, .admin-summary {
+          grid-template-columns: repeat(2, minmax(150px, 1fr));
+        }
+
+        .topbar-inner {
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .topnav {
+          width: 100%;
+          justify-content: center;
+        }
+
+        .page {
+          padding-top: 32px;
+        }
+
+        .hero h1 {
+          font-size: 2.5rem;
+        }
+
+        .auth-panel, .station-card, .dashboard-top, .form-section, .voucher-box {
+          padding: 18px;
+        }
+
+        .stats-grid, .card-grid, .reward-market, .waste-types, .station-categories, .dashboard-top .stat-row, .admin-summary, .voucher-meta {
+          grid-template-columns: 1fr;
+        }
+
+        .dual-buttons, .hero-actions {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div class="brand">
+          <div class="logo-mark" aria-hidden="true"></div>
+          <div class="brand-text">
+            <div class="brand-title">SmartWaste Rewards</div>
+            <div class="brand-sub">Waste Reward Platform</div>
+          </div>
+        </div>
+
+        <nav class="topnav" aria-label="Main menu">
+          <button class="nav-link active" data-page="landing">Home</button>
+          <button class="nav-link" data-page="howitworks">How it Works</button>
+          <button class="nav-link" data-page="qr">Station QR</button>
+          <button class="nav-link" data-page="dashboard">Dashboard</button>
+        </nav>
+
+        <div class="header-actions">
+          <button class="pill-button" data-page="auth">Login</button>
+          <button class="tiny-btn-alt" data-page="admin">Admin</button>
+          <button class="profile-button" id="profileButton" data-page="profile" aria-label="Open profile" title="Open profile" hidden>
+            <img alt="Profile picture" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='24' fill='%23dff5e8'/%3E%3Ccircle cx='24' cy='18' r='9' fill='%231f8a5b'/%3E%3Cpath d='M8 44c1-10 7-15 16-15s15 5 16 15' fill='%231f8a5b'/%3E%3C/svg%3E" />
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="page active" id="landing">
+        <div class="container">
+          <div class="hero">
+            <div>
+              <span class="eyebrow">Smart Waste India</span>
+              <h1>Turn Your Waste Into Rewards</h1>
+              <p>
+                Segregate your waste, earn points, and contribute to a cleaner India.
+                SmartWaste Rewards makes household segregation easy, visible, and rewarding.
+              </p>
+              <div class="hero-actions">
+                <button class="primary-btn" data-page="auth">Start Recycling</button>
+                <button class="secondary-btn" data-page="howitworks">How It Works</button>
+              </div>
+            </div>
+
+            <div class="overview-card">
+              <div class="station-visual" aria-label="Smart waste station">
+                <div class="station-grid">
+                  <div class="station-box">
+                    <div class="icon">♻️</div>
+                    <h4>Dry</h4>
+                    <strong>Dry Waste</strong>
+                  </div>
+                  <div class="station-box">
+                    <div class="icon">🥬</div>
+                    <h4>Wet</h4>
+                    <strong>Wet Waste</strong>
+                  </div>
+                  <div class="station-box">
+                    <div class="icon">💻</div>
+                    <h4>E-Waste</h4>
+                    <strong>Electronics</strong>
+                  </div>
+                  <div class="station-box">
+                    <div class="icon">⚖️</div>
+                    <h4>Scale</h4>
+                    <strong>Smart Scale</strong>
+                  </div>
+                </div>
+                <div class="mini-badge">
+                  <small>Reward Rate</small>
+                  <strong>2.5 pts / kg</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="stats-grid" aria-label="Platform Statistics">
+            <div class="stat-card">
+              <span class="label">Platform Statistics</span>
+              <strong>12,450 kg</strong>
+              <div class="label">Waste Collected</div>
+            </div>
+            <div class="stat-card">
+              <span class="label">Platform Statistics</span>
+              <strong>8,920</strong>
+              <div class="label">Registered Users</div>
+            </div>
+            <div class="stat-card">
+              <span class="label">Platform Statistics</span>
+              <strong>124,500</strong>
+              <div class="label">Points Earned</div>
+            </div>
+            <div class="stat-card">
+              <span class="label">Platform Statistics</span>
+              <strong>3,240</strong>
+              <div class="label">Reward Redemptions</div>
+            </div>
+          </div>
+
+          <div class="section-head" style="margin-top: 56px;">
+            <h2>How it works</h2>
+          </div>
+
+          <div class="how-grid">
+            <div class="step-card">
+              <div class="step-number">1</div>
+              <h3>Scan the QR</h3>
+              <p>Find a SmartWaste station and scan the QR to begin a proper segregation entry.</p>
+            </div>
+            <div class="step-card">
+              <div class="step-number">2</div>
+              <h3>Login</h3>
+              <p>Use your mobile number and account to access the reward dashboard.</p>
+            </div>
+            <div class="step-card">
+              <div class="step-number">3</div>
+              <h3>Deposit & Upload Proof</h3>
+              <p>Select the waste type and upload an image as proof of your deposit.</p>
+            </div>
+            <div class="step-card">
+              <div class="step-number">4</div>
+              <h3>Earn Rewards</h3>
+              <p>Earn 2.5 points per kg and redeem for reward vouchers with value-based offers.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="page" id="auth">
+        <div class="page-shell auth-wrap">
+          <div class="auth-panel">
+            <span class="eyebrow">Secure Access</span>
+            <h2>Welcome back</h2>
+            <p>Use your account to access your rewards dashboard and track waste collection.</p>
+            <form id="loginForm" class="form-grid">
+              <div class="field">
+                <label for="mobile">Mobile Number</label>
+                <input id="mobile" type="tel" placeholder="+91 98765 43210" autocomplete="tel" required />
+              </div>
+              <div class="field">
+                <label for="pin">Password</label>
+                <input id="pin" type="password" placeholder="Enter password" autocomplete="current-password" required />
+              </div>
+              <div class="dual-buttons">
+                <button class="primary-btn" id="loginBtn" type="submit">Login</button>
+                <button class="secondary-btn" type="button" data-page="signup">Create Account</button>
+              </div>
+                <small>Demo accounts are stored only for this browser session.</small>
+                <p id="loginMessage" role="status" aria-live="polite"></p>
+            </form>
+          </div>
+
+          <div class="auth-panel">
+            <span class="eyebrow">Platform Highlights</span>
+            <h2>Why users keep coming back</h2>
+            <ul class="feature-list">
+              <li>Track every deposit and total points earned</li>
+              <li>Upload proof for waste verification</li>
+              <li>Redeem clean reward vouchers with mock codes</li>
+              <li>See contribution stats for your community</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="page" id="signup">
+        <div class="page-shell auth-wrap">
+          <div class="auth-panel">
+            <span class="eyebrow">Join SmartWaste</span>
+            <h2>Create your account</h2>
+            <p>Register to track your recycling deposits and earn reward points.</p>
+            <form id="signupForm" class="form-grid">
+              <div class="field">
+                <label for="signupName">Name</label>
+                <input id="signupName" type="text" placeholder="Enter your name" autocomplete="name" required />
+              </div>
+              <div class="field">
+                <label for="signupMobile">Mobile Number</label>
+                <input id="signupMobile" type="tel" placeholder="+91 98765 43210" autocomplete="tel" required />
+              </div>
+              <div class="field">
+                <label for="signupPassword">Password</label>
+                <input id="signupPassword" type="password" placeholder="At least 8 characters" autocomplete="new-password" minlength="8" required />
+              </div>
+              <div class="field">
+                <label for="confirmPassword">Confirm Password</label>
+                <input id="confirmPassword" type="password" placeholder="Re-enter your password" autocomplete="new-password" minlength="8" required />
+              </div>
+              <div class="dual-buttons">
+                <button class="primary-btn" type="submit">Create Account</button>
+                <button class="secondary-btn" type="button" data-page="auth">Back to Login</button>
+              </div>
+              <small>Demo accounts are stored only for this browser session.</small>
+              <p id="signupMessage" role="status" aria-live="polite"></p>
+            </form>
+          </div>
+          <div class="auth-panel">
+            <span class="eyebrow">Earn as you recycle</span>
+            <h2>Every deposit counts</h2>
+            <ul class="feature-list">
+              <li>Choose one or more waste categories for a deposit</li>
+              <li>Earn 2.5 points for every kilogram recycled</li>
+              <li>Track deposits and reward points in your dashboard</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="page" id="station">
+        <div class="page-shell station-page">
+          <div class="station-card">
+            <div class="station-header">
+              <div>
+                <span class="eyebrow">Entry Point</span>
+                <h2>Smart Waste Station</h2>
+              </div>
+              <button class="tiny-btn" data-page="dashboard">View Dashboard</button>
+            </div>
+
+            <div class="station-meta">
+              <div class="meta-box">
+                <span class="meta-label">Station ID</span>
+                <strong>SW-THN-001</strong>
+              </div>
+              <div class="meta-box">
+                <span class="meta-label">Location</span>
+                <strong>Community Recycling Center</strong>
+              </div>
+            </div>
+
+            <div class="station-categories">
+              <div class="category-card">
+                <div class="mini-icon">📦</div>
+                <div>
+                  <span>Category</span>
+                  <strong>Dry Waste</strong>
+                </div>
+              </div>
+              <div class="category-card">
+                <div class="mini-icon">🧺</div>
+                <div>
+                  <span>Category</span>
+                  <strong>Wet Waste</strong>
+                </div>
+              </div>
+              <div class="category-card">
+                <div class="mini-icon">💻</div>
+                <div>
+                  <span>Category</span>
+                  <strong>E-Waste</strong>
+                </div>
+              </div>
+              <div class="category-card">
+                <div class="mini-icon">⚖️</div>
+                <div>
+                  <span>Category</span>
+                  <strong>Smart Scale</strong>
+                </div>
+              </div>
+            </div>
+
+            <div style="margin-top: 24px; display: flex; justify-content: center;">
+              <button class="primary-btn" data-page="submit">Continue to Deposit Waste</button>
+            </div>
+
+            <div class="notice-box">
+              Verified waste submissions are required to receive points. Unverified or incomplete uploads are not eligible.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="page" id="dashboard">
+        <div class="page-shell dashboard-grid">
+          <div class="dashboard-top">
+            <div class="dashboard-header">
+              <div>
+                <span class="eyebrow">Your Reward Dashboard</span>
+                <h2>Hello, <span id="helloName">Riya</span></h2>
+              </div>
+              <button class="primary-btn" data-page="submit">Submit New Waste</button>
+            </div>
+
+            <div class="stat-row">
+              <div class="stat-metric">
+                <small>Current Points</small>
+                <strong id="currentPoints">250 Points</strong>
+              </div>
+              <div class="stat-metric">
+                <small>Estimated Reward Value</small>
+                <strong id="estimatedValue">₹0.00</strong>
+              </div>
+              <div class="stat-metric">
+                <small>Total Waste Recycled</small>
+                <strong id="dashboardWaste">0.0 kg</strong>
+              </div>
+              <div class="stat-metric">
+                <small>Total Deposits</small>
+                <strong id="dashboardDeposits">0</strong>
+              </div>
+            </div>
+
+            <div class="progress-panel">
+              <div class="progress-copy">
+                <strong id="pointsProgressText">0 / 100 points</strong>
+                <span>Next reward available!</span>
+              </div>
+              <div class="progress-bar" aria-label="Progress to next reward">
+                <span id="pointsProgressBar" style="width: 0%;"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-grid">
+            <div class="quick-card" data-page="rewards" tabindex="0" role="button" aria-label="Redeem rewards">
+              <div class="icon">🎁</div>
+              <div>
+                <strong>Redeem Rewards</strong>
+                <p>Unlock mock vouchers for your active points balance.</p>
+              </div>
+            </div>
+            <div class="quick-card" data-page="history" tabindex="0" role="button" aria-label="View transaction history">
+              <div class="icon">📜</div>
+              <div>
+                <strong>Transaction History</strong>
+                <p>Review all verified waste submissions and redemptions.</p>
+              </div>
+            </div>
+            <div class="quick-card" data-page="profile" tabindex="0" role="button" aria-label="Open profile page">
+              <div class="icon">👤</div>
+              <div>
+                <strong>My Profile</strong>
+                <p>Update account details and monitor your contribution.</p>
+              </div>
+            </div>
+            <div class="quick-card" data-page="qr" tabindex="0" role="button" aria-label="View station QR code">
+              <div class="icon">📷</div>
+              <div>
+                <strong>Station QR</strong>
+                <p>Access the demo waste station and QR code details.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="page" id="submit">
+        <div class="page-shell">
+          <div class="section-head">
+            <h2>Submit Your Waste</h2>
+          </div>
+
+          <form class="waste-form" id="submitForm">
+            <div class="form-section">
+              <h3>Step 1 — Select one or more waste types</h3>
+              <div class="waste-types">
+                <label class="waste-type">
+                  <input type="checkbox" name="wasteType" value="Dry Waste" />
+                  <span class="type-card">
+                    <span class="type-icon">📦</span>
+                    <strong>Dry Waste</strong>
+                    <small>Examples: paper, cardboard, plastic packaging</small>
+                  </span>
+                </label>
+                <label class="waste-type">
+                  <input type="checkbox" name="wasteType" value="Wet Waste" />
+                  <span class="type-card">
+                    <span class="type-icon">🥬</span>
+                    <strong>Wet Waste</strong>
+                    <small>Examples: food waste, vegetable waste</small>
+                  </span>
+                </label>
+                <label class="waste-type">
+                  <input type="checkbox" name="wasteType" value="E-Waste" />
+                  <span class="type-card">
+                    <span class="type-icon">💻</span>
+                    <strong>E-Waste</strong>
+                    <small>Examples: cables, small electronics, batteries</small>
+                  </span>
+                </label>
+                <label class="waste-type">
+                  <input type="checkbox" name="wasteType" value="Other / Mixed" />
+                  <span class="type-card">
+                    <span class="type-icon">🧩</span>
+                    <strong>Other / Mixed</strong>
+                    <small>For demonstration purposes only</small>
+                  </span>
+                </label>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h3>Step 2 — Upload Waste Photo</h3>
+              <div class="upload-box" id="uploadBox">
+                <input id="photoUpload" type="file" accept="image/jpeg,image/png,image/webp" />
+                <div class="upload-box-content">
+                  <div class="upload-icon">📸</div>
+                  <strong>Upload a photo of your deposited waste</strong>
+                  <p>Photo required for reward verification.<br />Allow JPG, PNG, WEBP.</p>
+                </div>
+                <img id="photoPreview" class="img-preview" alt="Waste preview" />
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h3>Step 3 — Enter Weight</h3>
+              <div class="weight-grid">
+                <div class="field">
+                  <label for="weightInput">Waste Weight</label>
+                  <input id="weightInput" type="number" min="0.1" max="50" step="0.1" value="2.5" />
+                </div>
+                <div class="smart-scale">
+                  <div class="scale-top">
+                    <span>Weight Detected</span>
+                    <span>kg</span>
+                  </div>
+                  <div class="scale-display">
+                    <div class="scale-number" id="scaleDisplay">2.50 kg</div>
+                  </div>
+                  <button type="button" class="secondary-btn" id="useScaleBtn">Use Machine Weight</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h3>Step 4 — Points Calculator</h3>
+              <div class="calc-card">
+                <span class="label">Reward Calculation</span>
+                <strong id="pointsCalc">25 Points</strong>
+                <small id="pointsDetails">2.5 kg × 2.5 = 6.25 Points</small>
+              </div>
+            </div>
+
+            <div style="display: flex; justify-content: center;">
+              <button type="submit" class="primary-btn" style="min-width: 280px;">Submit Waste & Earn Points</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <section class="page" id="rewards">
+        <div class="page-shell">
+          <div class="section-head">
+            <h2>Redeem Your Points</h2>
+          </div>
+
+          <div class="reward-market">
+            <div class="reward-card">
+              <span class="reward-badge">Amazon</span>
+              <h3>Amazon Reward Voucher</h3>
+              <span class="amount">₹50</span>
+              <span class="points">100 Points</span>
+              <button class="primary-btn" data-voucher="AMAZON" data-value="50" data-points="100">Redeem</button>
+            </div>
+            <div class="reward-card">
+              <span class="reward-badge">KFC</span>
+              <h3>KFC Reward Voucher</h3>
+              <span class="amount">₹50</span>
+              <span class="points">100 Points</span>
+              <button class="primary-btn" data-voucher="KFC" data-value="50" data-points="100">Redeem</button>
+            </div>
+            <div class="reward-card">
+              <span class="reward-badge">Optional</span>
+              <h3>₹100 Reward Voucher</h3>
+              <span class="amount">₹100</span>
+              <span class="points">200 Points</span>
+              <button class="primary-btn" data-voucher="GENERAL" data-value="100" data-points="200">Redeem</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="page" id="reward-success">
+        <div class="page-shell">
+          <div class="voucher-box">
+            <div class="voucher-head">
+              <div class="voucher-logo">
+                <div class="logo-mark" style="width: 36px; height: 36px;"></div>
+                <div>
+                  <strong style="font-size: 1.1rem; color: var(--primary-deep);">SmartWaste Rewards</strong>
+                  <div style="font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em;">Smart Waste Rewards</div>
+                </div>
+              </div>
+              <span class="mini-tag">Reward Voucher</span>
+            </div>
+
+            <div style="margin-top: 24px; text-align: center;">
+              <h2 style="font-size: clamp(2rem, 3vw, 3rem); letter-spacing: -0.05em; color: var(--primary-deep);">Reward Redeemed!</h2>
+              <div style="margin-top: 10px; font-size: 1.2rem; color: var(--muted);">₹50 <strong style="color: var(--primary-deep);">Amazon Reward Voucher</strong></div>
+            </div>
+
+            <div class="voucher-graphic">
+              <div class="qr-art" aria-label="Reward QR graphic"></div>
+            </div>
+
+            <div class="voucher-code">
+              <div>
+                <small style="display:block; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; font-weight:700; margin-bottom: 8px;">Voucher Code</small>
+                <strong id="voucherCode">AMZ-DEMO-49281</strong>
+              </div>
+              <button class="tiny-btn" id="copyCodeBtn">Copy Code</button>
+            </div>
+
+            <div class="voucher-meta">
+              <div class="meta-box">
+                <span class="meta-label">Points Used</span>
+                <strong id="pointsUsed">100</strong>
+              </div>
+              <div class="meta-box">
+                <span class="meta-label">Remaining Points</span>
+                <strong id="remainingPoints">175</strong>
+              </div>
+              <div class="meta-box">
+                <span class="meta-label">Voucher Type</span>
+                <strong>Mock</strong>
+              </div>
+            </div>
+
+            <div class="notice-box" style="margin-top: 18px; background: #fff7db; border-color: rgba(242, 164, 51, 0.2); color: #815608;">
+              This voucher has no monetary value and cannot be redeemed.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="page" id="history">
+        <div class="page-shell">
+          <div class="section-head">
+            <h2>Transaction History</h2>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Type</th>
+                  <th>Weight</th>
+                  <th>Points</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>06 Oct 2026</td>
+                  <td>Dry Waste</td>
+                  <td>2.5 kg</td>
+                  <td>+25</td>
+                  <td><span class="status-pill status-verified">Verified</span></td>
+                </tr>
+                <tr>
+                  <td>05 Oct 2026</td>
+                  <td>Wet Waste</td>
+                  <td>1.8 kg</td>
+                  <td>+18</td>
+                  <td><span class="status-pill status-verified">Verified</span></td>
+                </tr>
+                <tr>
+                  <td>03 Oct 2026</td>
+                  <td>E-Waste</td>
+                  <td>3.0 kg</td>
+                  <td>+30</td>
+                  <td><span class="status-pill status-verified">Verified</span></td>
+                </tr>
+                <tr>
+                  <td>01 Oct 2026</td>
+                  <td>Reward Redemption</td>
+                  <td>—</td>
+                  <td>-100</td>
+                  <td><span class="status-pill status-redeemed">Redeemed</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="page" id="profile">
+        <div class="page-shell profile-grid">
+          <div class="panel" style="padding: 24px;">
+            <div class="section-head" style="margin-bottom: 18px;">
+              <h2>My Profile</h2>
+            </div>
+            <div class="profile-summary">
+              <div class="info-row"><span>Name</span><strong id="profileName">Riya Sharma</strong></div>
+              <div class="info-row"><span>Mobile Number</span><strong id="profileMobile"></strong></div>
+              <div class="info-row"><span>User ID</span><strong>SW-2026-1084</strong></div>
+              <div class="info-row"><span>Total Waste</span><strong id="profileWaste">0.0 kg</strong></div>
+              <div class="info-row"><span>Total Points</span><strong id="profilePoints">0</strong></div>
+              <div class="info-row"><span>Rewards Redeemed</span><strong>0</strong></div>
+            </div>
+          </div>
+
+          <div class="panel" style="padding: 24px;">
+            <div class="section-head" style="margin-bottom: 18px;">
+              <h2>Edit Details</h2>
+            </div>
+            <div class="profile-form">
+              <div class="field">
+                <label for="editName">Name</label>
+                <input id="editName" type="text" value="Riya Sharma" />
+              </div>
+              <div class="field">
+                <label for="editMobile">Mobile Number</label>
+                <input id="editMobile" type="tel" value="+91 98765 43210" />
+              </div>
+              <div class="dual-buttons">
+                <button class="primary-btn" id="saveProfileBtn" type="button">Save Changes</button>
+                <button class="secondary-btn" id="signOutBtn" type="button">Log Out</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="page" id="admin">
+        <div class="page-shell">
+          <div class="section-head">
+            <h2>Admin Dashboard</h2>
+          </div>
+
+          <div class="admin-summary">
+            <div class="stat-metric">
+              <small>Total Users</small>
+              <strong>8,920</strong>
+            </div>
+            <div class="stat-metric">
+              <small>Total Waste Collected</small>
+              <strong>12,450 kg</strong>
+            </div>
+            <div class="stat-metric">
+              <small>Dry Waste</small>
+              <strong>5,280 kg</strong>
+            </div>
+            <div class="stat-metric">
+              <small>Wet Waste</small>
+              <strong>4,110 kg</strong>
+            </div>
+          </div>
+
+          <div class="admin-summary" style="margin-bottom: 22px;">
+            <div class="stat-metric">
+              <small>E-Waste</small>
+              <strong>2,060 kg</strong>
+            </div>
+            <div class="stat-metric">
+              <small>Total Points Issued</small>
+              <strong>124,500</strong>
+            </div>
+            <div class="stat-metric">
+              <small>Total Rewards Redeemed</small>
+              <strong>3,240</strong>
+            </div>
+            <div class="stat-metric">
+              <small>Pending Reviews</small>
+              <strong>14</strong>
+            </div>
+          </div>
+
+          <div class="charts-grid">
+            <div class="chart-card">
+              <h4>Waste collected by category</h4>
+              <div class="bars">
+                <div class="bar-col">
+                  <div class="bar" style="height: 68%;"></div>
+                  <span>Dry</span>
+                </div>
+                <div class="bar-col">
+                  <div class="bar bar-warm" style="height: 52%;"></div>
+                  <span>Wet</span>
+                </div>
+                <div class="bar-col">
+                  <div class="bar bar-blue" style="height: 34%;"></div>
+                  <span>E-Waste</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="chart-card">
+              <h4>Daily waste collection</h4>
+              <div class="line-chart">
+                <div class="line-point" style="height: 22%;"></div>
+                <div class="line-point" style="height: 38%;"></div>
+                <div class="line-point" style="height: 52%;"></div>
+                <div class="line-point" style="height: 46%;"></div>
+                <div class="line-point" style="height: 65%;"></div>
+                <div class="line-point" style="height: 74%;"></div>
+                <div class="line-point" style="height: 90%;"></div>
+              </div>
+              <div class="label-row">
+                <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="chart-card" style="margin-bottom: 22px;">
+            <h4>Points issued</h4>
+            <div class="bars">
+              <div class="bar-col">
+                <div class="bar" style="height: 44%;"></div>
+                <span>Jan</span>
+              </div>
+              <div class="bar-col">
+                <div class="bar" style="height: 58%;"></div>
+                <span>Feb</span>
+              </div>
+              <div class="bar-col">
+                <div class="bar" style="height: 66%;"></div>
+                <span>Mar</span>
+              </div>
+              <div class="bar-col">
+                <div class="bar" style="height: 74%;"></div>
+                <span>Apr</span>
+              </div>
+              <div class="bar-col">
+                <div class="bar" style="height: 82%;"></div>
+                <span>May</span>
+              </div>
+              <div class="bar-col">
+                <div class="bar" style="height: 90%;"></div>
+                <span>Jun</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>User</th>
+                  <th>Waste Type</th>
+                  <th>Weight</th>
+                  <th>Uploaded Photo</th>
+                  <th>Points</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Riya Sharma</td>
+                  <td>Dry Waste</td>
+                  <td>2.5 kg</td>
+                  <td>Photo-221</td>
+                  <td>25</td>
+                  <td><span class="status-pill status-pending">Pending</span></td>
+                  <td>
+                    <div class="table-actions">
+                      <button class="approve-btn" data-has-photo="false" disabled>Approve</button>
+                      <button class="reject-btn">Reject</button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Nikhil A.</td>
+                  <td>Wet Waste</td>
+                  <td>1.8 kg</td>
+                  <td>Photo-219</td>
+                  <td>18</td>
+                  <td><span class="status-pill status-verified">Verified</span></td>
+                  <td>
+                    <div class="table-actions">
+                      <button class="approve-btn" data-has-photo="false" disabled>Approve</button>
+                      <button class="reject-btn">Reject</button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Meera I.</td>
+                  <td>E-Waste</td>
+                  <td>3.0 kg</td>
+                  <td>Photo-217</td>
+                  <td>30</td>
+                  <td><span class="status-pill status-pending">Pending</span></td>
+                  <td>
+                    <div class="table-actions">
+                      <button class="approve-btn" data-has-photo="false" disabled>Approve</button>
+                      <button class="reject-btn">Reject</button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="page" id="qr">
+        <div class="page-shell qr-panel">
+          <div class="eyebrow">Station QR</div>
+          <div class="qr-box" aria-label="Station QR code"></div>
+          <div>
+            <h2 style="font-size: clamp(2rem, 3vw, 3rem); letter-spacing: -0.05em; color: var(--primary-deep);">Scan to access SmartWaste Rewards</h2>
+            <p style="margin-top: 10px; color: var(--muted);">Station: SW-THN-001<br />Location: Recycling Center</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="page" id="howitworks">
+        <div class="page-shell">
+          <div class="section-head">
+            <h2>How the system works</h2>
+          </div>
+
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-bullet">1</div>
+              <div class="timeline-panel">
+                <h4>Find a SmartWaste station.</h4>
+                <p>Locate a physically marked recycling point in your neighborhood or school campus.</p>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-bullet">2</div>
+              <div class="timeline-panel">
+                <h4>Scan the QR code.</h4>
+                <p>Use your mobile device to access the station entry and quick identification screen.</p>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-bullet">3</div>
+              <div class="timeline-panel">
+                <h4>Login to your account.</h4>
+                <p>Sign in using your mobile number and password or create a new account.</p>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-bullet">4</div>
+              <div class="timeline-panel">
+                <h4>Select the waste category.</h4>
+                <p>Choose Dry, Wet, E-Waste, or Other / Mixed before depositing materials.</p>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-bullet">5</div>
+              <div class="timeline-panel">
+                <h4>Deposit waste into the correct bin.</h4>
+                <p>Place each item carefully into the matching waste section to support sorting.</p>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-bullet">6</div>
+              <div class="timeline-panel">
+                <h4>The smart scale measures the waste.</h4>
+                <p>Every deposit is validated by a simulated measurement and a digital check.</p>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-bullet">7</div>
+              <div class="timeline-panel">
+                <h4>Upload a photo as proof.</h4>
+                <p>A picture helps confirm the item and waste category for the review dashboard.</p>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-bullet">8</div>
+              <div class="timeline-panel">
+                <h4>Submit the weight.</h4>
+                <p>Finish the form and let the platform auto-calculate your points for this deposit.</p>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-bullet">9</div>
+              <div class="timeline-panel">
+                <h4>Receive 2.5 points per kg.</h4>
+                <p>Your reward points are added instantly when the deposit is approved after review.</p>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-bullet">10</div>
+              <div class="timeline-panel">
+                <h4>Redeem points for demo rewards.</h4>
+                <p>Use your points to generate reward vouchers for your account balance.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div class="modal" id="redeemModal" aria-modal="true" role="dialog">
+      <div class="modal-body">
+        <h3>Redeem 100 Points for ₹50 Amazon Reward Voucher?</h3>
+        <p>By confirming, 100 points will be deducted from your balance and a reward code will be generated. This voucher is for the platform experience only and is not redeemable outside the app.</p>
+        <div class="modal-actions">
+          <button class="tiny-btn-alt" id="cancelRedeemBtn">Cancel</button>
+          <button class="primary-btn" id="confirmRedeemBtn">Confirm</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const state = {
+        userName: '',
+        mobile: '',
+        points: 0,
+        totalWaste: 0,
+        deposits: 0,
+        accounts: [],
+        isAuthenticated: false,
+        selectedVoucher: null,
+        rewardCode: 'AMZ-DEMO-49281'
+      };
+
+      const POINTS_PER_KG = 2.5;
+      const pages = document.querySelectorAll('.page');
+      const navLinks = document.querySelectorAll('.nav-link');
+      const actionButtons = document.querySelectorAll('[data-page]');
+      const currentPointsEl = document.getElementById('currentPoints');
+      const helloNameEl = document.getElementById('helloName');
+      const profileNameEl = document.getElementById('profileName');
+
+      function showPage(pageId) {
+        const protectedPages = ['dashboard', 'submit', 'rewards', 'history', 'profile'];
+        const targetPage = protectedPages.includes(pageId) && !state.isAuthenticated ? 'auth' : pageId;
+        pages.forEach(page => page.classList.toggle('active', page.id === targetPage));
+        navLinks.forEach(link => {
+          link.classList.toggle('active', link.dataset.page === targetPage);
+        });
+      }
+
+      function updatePointsDisplay() {
+        currentPointsEl.textContent = `${formatPoints(state.points)} Points`;
+        helloNameEl.textContent = state.userName.split(' ')[0] || 'there';
+        profileNameEl.textContent = state.userName;
+        document.getElementById('profileMobile').textContent = state.mobile;
+        document.getElementById('profilePoints').textContent = formatPoints(state.points);
+        document.getElementById('estimatedValue').textContent = `₹${(state.points / 2).toFixed(2)}`;
+        document.getElementById('dashboardWaste').textContent = `${state.totalWaste.toFixed(1)} kg`;
+        document.getElementById('dashboardDeposits').textContent = state.deposits.toString();
+        document.getElementById('profileWaste').textContent = `${state.totalWaste.toFixed(1)} kg`;
+        document.getElementById('pointsProgressText').textContent = `${formatPoints(state.points)} / 100 points`;
+        document.getElementById('pointsProgressBar').style.width = `${Math.min(state.points, 100)}%`;
+        document.getElementById('editName').value = state.userName;
+        document.getElementById('editMobile').value = state.mobile;
+        document.getElementById('profileButton').hidden = !state.isAuthenticated;
+        document.querySelector('.header-actions [data-page="auth"]').hidden = state.isAuthenticated;
+        document.querySelector('.header-actions [data-page="admin"]').hidden = state.isAuthenticated;
+      }
+
+      function formatPoints(points) {
+        return Number(points.toFixed(2)).toString();
+      }
+
+      function signIn(account) {
+        state.userName = account.name;
+        state.mobile = account.mobile;
+        state.points = account.points;
+        state.totalWaste = account.totalWaste;
+        state.deposits = account.deposits;
+        state.isAuthenticated = true;
+        updatePointsDisplay();
+        showPage('dashboard');
+      }
+
+      actionButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const page = btn.dataset.page;
+          if (page) showPage(page);
+        });
+      });
+
+      document.getElementById('loginForm').addEventListener('submit', event => {
+        event.preventDefault();
+        const mobile = document.getElementById('mobile').value.trim();
+        const password = document.getElementById('pin').value;
+        const account = state.accounts.find(user => user.mobile === mobile && user.password === password);
+        const loginMessage = document.getElementById('loginMessage');
+        if (!account) {
+          loginMessage.textContent = 'Account not found or password is incorrect. Create an account if you are new.';
+          return;
+        }
+        loginMessage.textContent = '';
+        signIn(account);
+      });
+
+      document.getElementById('signupForm').addEventListener('submit', event => {
+        event.preventDefault();
+        const name = document.getElementById('signupName').value.trim();
+        const mobile = document.getElementById('signupMobile').value.trim();
+        const password = document.getElementById('signupPassword').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        const signupMessage = document.getElementById('signupMessage');
+        if (password !== confirmPassword) {
+          signupMessage.textContent = 'Passwords do not match.';
+          return;
+        }
+        if (state.accounts.some(account => account.mobile === mobile)) {
+          signupMessage.textContent = 'An account with this mobile number already exists. Please log in.';
+          return;
+        }
+        const account = { name, mobile, password, points: 0, totalWaste: 0, deposits: 0 };
+        state.accounts.push(account);
+        signupMessage.textContent = '';
+        signIn(account);
+      });
+
+      const weightInput = document.getElementById('weightInput');
+      const scaleDisplay = document.getElementById('scaleDisplay');
+      const pointsCalc = document.getElementById('pointsCalc');
+
+      function refreshCalculation() {
+        const weight = parseFloat(weightInput.value) || 0;
+        const points = Number((weight * POINTS_PER_KG).toFixed(2));
+        scaleDisplay.textContent = `${weight.toFixed(2)} kg`;
+        pointsCalc.textContent = `${formatPoints(points)} Points`;
+        document.getElementById('pointsDetails').textContent = `${weight.toFixed(2)} kg × ${POINTS_PER_KG} = ${formatPoints(points)} Points`;
+      }
+
+      weightInput.addEventListener('input', refreshCalculation);
+      document.getElementById('useScaleBtn').addEventListener('click', () => {
+        weightInput.value = '2.50';
+        refreshCalculation();
+      });
+
+      refreshCalculation();
+
+      document.getElementById('photoUpload').addEventListener('change', function (event) {
+        const file = event.target.files && event.target.files[0];
+        const preview = document.getElementById('photoPreview');
+        const uploadBox = document.getElementById('uploadBox');
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          preview.src = e.target.result;
+          uploadBox.classList.add('has-preview');
+        };
+        reader.readAsDataURL(file);
+      });
+
+      document.getElementById('submitForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const photoInput = document.getElementById('photoUpload');
+        if (!photoInput.files || !photoInput.files[0]) {
+          alert('Please upload a photo before submitting waste. No points will be added without a valid image upload.');
+          photoInput.focus();
+          return;
+        }
+
+        if (!weightInput.validity.valid || !weightInput.value || Number(weightInput.value) <= 0) {
+          alert('Please enter a waste weight between 0.1 kg and 50 kg.');
+          weightInput.focus();
+          return;
+        }
+
+        const selectedTypes = Array.from(document.querySelectorAll('input[name="wasteType"]:checked'));
+        if (selectedTypes.length === 0) {
+          alert('Please select at least one waste type.');
+          document.querySelector('input[name="wasteType"]').focus();
+          return;
+        }
+
+        const weight = parseFloat(weightInput.value) || 0;
+        const points = Number((weight * POINTS_PER_KG).toFixed(2));
+        state.points = state.points + points;
+        state.totalWaste += weight;
+        state.deposits += 1;
+        const currentAccount = state.accounts.find(account => account.mobile === state.mobile);
+        if (currentAccount) {
+          currentAccount.points = state.points;
+          currentAccount.totalWaste = state.totalWaste;
+          currentAccount.deposits = state.deposits;
+        }
+        updatePointsDisplay();
+        showPage('dashboard');
+      });
+
+      document.querySelectorAll('.approve-btn').forEach(button => {
+        button.addEventListener('click', function () {
+          if (this.dataset.hasPhoto !== 'true') {
+            alert('This submission cannot be approved without a valid uploaded photo.');
+            return;
+          }
+        });
+      });
+
+      const redeemModal = document.getElementById('redeemModal');
+      const rewardButtons = document.querySelectorAll('[data-voucher]');
+      const modalTitle = document.querySelector('.modal-body h3');
+
+      rewardButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          state.selectedVoucher = button.dataset.voucher;
+          const amount = button.dataset.value;
+          const points = button.dataset.points;
+          const label = button.dataset.voucher === 'AMAZON' ? 'Amazon' : button.dataset.voucher === 'KFC' ? 'KFC' : 'General';
+          modalTitle.textContent = `Redeem ${points} Points for ₹${amount} ${label} Reward Voucher?`;
+          redeemModal.classList.add('open');
+        });
+      });
+
+      document.getElementById('cancelRedeemBtn').addEventListener('click', () => redeemModal.classList.remove('open'));
+      document.getElementById('confirmRedeemBtn').addEventListener('click', () => {
+        if (!state.selectedVoucher) return;
+        const targetBtn = Array.from(rewardButtons).find(btn => btn.dataset.voucher === state.selectedVoucher);
+        const pointsUsed = Number(targetBtn.dataset.points);
+        if (state.points < pointsUsed) {
+          alert('You do not have enough points to redeem this reward.');
+          redeemModal.classList.remove('open');
+          return;
+        }
+        const remaining = state.points - pointsUsed;
+        state.points = remaining;
+        const currentAccount = state.accounts.find(account => account.mobile === state.mobile);
+        if (currentAccount) currentAccount.points = state.points;
+        updatePointsDisplay();
+        const code = state.selectedVoucher === 'AMAZON' ? 'AMZ-DEMO-49281' : state.selectedVoucher === 'KFC' ? 'KFC-DEMO-73921' : 'SW-DEMO-8X29K';
+        document.getElementById('voucherCode').textContent = code;
+        document.getElementById('pointsUsed').textContent = pointsUsed;
+        document.getElementById('remainingPoints').textContent = remaining;
+        redeemModal.classList.remove('open');
+        showPage('reward-success');
+      });
+
+      document.getElementById('copyCodeBtn').addEventListener('click', async () => {
+        const code = document.getElementById('voucherCode').textContent;
+        try {
+          await navigator.clipboard.writeText(code);
+          document.getElementById('copyCodeBtn').textContent = 'Copied!';
+          setTimeout(() => {
+            document.getElementById('copyCodeBtn').textContent = 'Copy Code';
+          }, 1300);
+        } catch (error) {
+          document.getElementById('copyCodeBtn').textContent = 'Copy failed';
+        }
+      });
+
+      document.getElementById('editName').addEventListener('input', function () {
+        state.userName = this.value;
+        updatePointsDisplay();
+      });
+
+      document.getElementById('saveProfileBtn').addEventListener('click', () => {
+        const name = document.getElementById('editName').value.trim();
+        const mobile = document.getElementById('editMobile').value.trim();
+        if (!name || !mobile) {
+          alert('Please enter your name and mobile number.');
+          return;
+        }
+        const previousMobile = state.mobile;
+        state.userName = name;
+        state.mobile = mobile;
+        const currentAccount = state.accounts.find(account => account.mobile === previousMobile);
+        if (currentAccount) {
+          currentAccount.name = name;
+          currentAccount.mobile = mobile;
+        }
+        updatePointsDisplay();
+        showPage('dashboard');
+      });
+
+      document.getElementById('signOutBtn').addEventListener('click', () => {
+        state.userName = '';
+        state.mobile = '';
+        state.points = 0;
+        state.isAuthenticated = false;
+        updatePointsDisplay();
+        showPage('landing');
+      });
+
+      updatePointsDisplay();
+      showPage('landing');
+    </script>
+  </body>
+</html>
